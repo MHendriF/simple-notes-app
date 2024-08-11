@@ -1,90 +1,37 @@
+:root {
+  --note-background: #ffffff;
+  --note-border: #e0e0e0;
+  --note-hover-background: #f0f4f8;
+  --note-title-color: #007bff;
+}
+
 body {
-  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f0f4f8; /* Warna latar belakang yang lebih lembut */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-.note {
-  border: 1px solid #e0e0e0;
-  background-color: #ffffff;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  opacity: 0;
-  transform: translateY(20px);
+note-list::part(note) {
+  background-color: var(--note-background);
+  border: 1px solid var(--note-border);
+  transition: background-color 0.3s;
+  gap: 10px;
 }
 
-.note.show {
-  opacity: 1;
-  transform: translateY(0);
+note-list::part(note):hover {
+  background-color: var(--note-hover-background);
 }
 
-.note:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-h3 {
-  margin: 0;
-  color: #333; /* Warna teks yang lebih gelap */
-}
-
-h2 {
-  margin: 20px 0 10px;
-  color: #007bff; /* Warna judul yang lebih cerah */
-}
-
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  width: 100%;
-  display: flex;
-  align-items: center; /* Menyelaraskan ikon dan teks */
-  justify-content: center; /* Menyelaraskan ikon dan teks */
-}
-
-button:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-button i {
-  margin-right: 5px; /* Jarak antara ikon dan teks */
-}
-
-/* Media Queries untuk tablet dan desktop */
-@media (min-width: 600px) {
-  .container {
-    flex-direction: row;
-    gap: 20px;
-  }
-
-  .note {
-    flex: 1;
-  }
-
-  button {
-    width: auto;
-  }
-}
-
-@media (max-width: 400px) {
-  input,
-  textarea {
-    font-size: 14px;
-  }
+note-list h2 {
+  color: var(--note-title-color);
 }

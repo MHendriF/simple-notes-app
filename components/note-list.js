@@ -8,25 +8,66 @@ class NoteList extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = `
             <style>
-                .note {
-                    border: 1px solid #ccc;
-                    padding: 10px;
-                    margin: 10px 0;
-                    border-radius: 5px;
-                    background-color: #fff;
-                    transition: transform 0.2s, box-shadow 0.2s;
-                    opacity: 0; /* Mulai dengan opacity 0 untuk animasi masuk */
-                    transform: translateY(20px); /* Mulai dengan sedikit terangkat */
+                :host {
+                    display: block;
+                    padding: 20px;
+                    background-color: #f9f9f9;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 }
-                .note.show {
-                    opacity: 1; /* Menampilkan catatan */
-                    transform: translateY(0); /* Kembali ke posisi normal */
+
+                #activeNotesContainer, #archivedNotesContainer {
+                    margin-bottom: 20px;
                 }
-                .archived {
-                    color: gray;
-                }
+
                 h2 {
-                    margin: 20px 0 10px;
+                    color: #007bff;
+                    margin-bottom: 10px;
+                }
+
+                #activeNotes, #archivedNotes {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Mengatur grid dengan maksimal 4 catatan */
+                    gap: 15px; /* Jarak antar catatan */
+                }
+
+                .note {
+                    border: 1px solid #e0e0e0;
+                    background-color: #ffffff;
+                    padding: 15px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    position: relative;
+                }
+
+                .note:hover {
+                    transform: scale(1.02);
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                }
+
+                button {
+                    padding: 10px;
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, transform 0.2s;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 5px;
+                }
+
+                button:hover {
+                    background-color: #0056b3;
+                    transform: translateY(-2px);
+                }
+
+                button i {
+                    margin-right: 5px;
                 }
             </style>
             <div id="activeNotesContainer">
@@ -46,18 +87,18 @@ class NoteList extends HTMLElement {
       : this.shadowRoot.querySelector('#activeNotes');
     const noteElement = document.createElement('div');
     noteElement.className = 'note';
+    noteElement.setAttribute('part', 'note'); // Menambahkan part untuk styling
     noteElement.innerHTML = `
-            <h3 class="${note.archived ? 'archived' : ''}">${note.title}</h3>
+            <h3>${note.title}</h3>
             <p>${note.body}</p>
             <small>${new Date(note.createdAt).toLocaleString()}</small>
-            <button class="delete-btn">Hapus</button>
-            <button class="archive-btn">${
-              note.archived ? 'Unarchive' : 'Archive'
-            }</button>
+            <button class="delete-btn"><i class="fas fa-trash"></i> Hapus</button>
+            <button class="archive-btn"><i class="fas ${
+              note.archived ? 'fa-undo' : 'fa-archive'
+            }"></i> ${note.archived ? 'Unarchive' : 'Archive'}</button>
         `;
     notesContainer.appendChild(noteElement);
 
-    // Menambahkan animasi masuk
     requestAnimationFrame(() => {
       noteElement.classList.add('show');
     });
