@@ -7,78 +7,107 @@ class NoteList extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: block;
-                    padding: 20px;
-                    background-color: #f9f9f9;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }
-
-                #activeNotesContainer, #archivedNotesContainer {
-                    margin-bottom: 20px;
-                }
-
-                h2 {
-                    color: #007bff;
-                    margin-bottom: 10px;
-                }
-
-                #activeNotes, #archivedNotes {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Mengatur grid dengan maksimal 4 catatan */
-                    gap: 15px; /* Jarak antar catatan */
-                }
-
-                .note {
-                    border: 1px solid #e0e0e0;
-                    background-color: #ffffff;
-                    padding: 15px;
-                    border-radius: 8px;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.2s, box-shadow 0.2s;
-                    position: relative;
-                }
-
-                .note:hover {
-                    transform: scale(1.02);
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-                }
-
-                button {
-                    padding: 10px;
-                    background-color: #007bff;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    transition: background-color 0.3s, transform 0.2s;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-bottom: 5px;
-                }
-
-                button:hover {
-                    background-color: #0056b3;
-                    transform: translateY(-2px);
-                }
-
-                button i {
-                    margin-right: 5px;
-                }
-            </style>
-            <div id="activeNotesContainer">
-                <h2>Catatan Aktif</h2>
-                <div id="activeNotes"></div>
-            </div>
-            <div id="archivedNotesContainer">
-                <h2>Catatan Diarsipkan</h2>
-                <div id="archivedNotes"></div>
-            </div>
-        `;
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+              <style>
+                  :host {
+                      display: block;
+                      padding: 20px;
+                      background-color: #f9f9f9;
+                      border-radius: 8px;
+                      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                  }
+  
+                  #activeNotesContainer, #archivedNotesContainer {
+                      margin-bottom: 20px;
+                  }
+  
+                  h2 {
+                      color: #007bff;
+                      margin-bottom: 10px;
+                  }
+  
+                  #activeNotes, #archivedNotes {
+                      display: grid;
+                      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                      gap: 15px;
+                  }
+  
+                  .note {
+                      border: 1px solid #e0e0e0;
+                      background-color: #ffffff;
+                      padding: 15px;
+                      border-radius: 8px;
+                      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                      transition: transform 0.2s, box-shadow 0.2s;
+                      position: relative;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-between;
+                  }
+  
+                  .note:hover {
+                      transform: scale(1.02);
+                      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                  }
+  
+                  .note-content {
+                      flex: 1;
+                  }
+  
+                  .note-buttons {
+                      display: flex;
+                      flex-direction: column;
+                  }
+  
+                  button {
+                      padding: 10px;
+                      background-color: #007bff;
+                      color: white;
+                      border: none;
+                      border-radius: 5px;
+                      cursor: pointer;
+                      transition: background-color 0.3s, transform 0.2s;
+                      width: 100%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      margin-bottom: 5px;
+                  }
+  
+                  button:hover {
+                      background-color: #0056b3;
+                      transform: translateY(-2px);
+                  }
+  
+                  button i {
+                      margin-right: 5px;
+                  }
+  
+                  h3, p, small {
+                      margin: 0 0 10px 0;
+                      word-wrap: break-word;
+                  }
+  
+                  small {
+                      font-size: 0.8em;
+                      color: #777;
+                  }
+  
+                  @media (max-width: 600px) {
+                      #activeNotes, #archivedNotes {
+                          grid-template-columns: 1fr;
+                      }
+                  }
+              </style>
+              <div id="activeNotesContainer">
+                  <h2>Catatan Aktif</h2>
+                  <div id="activeNotes"></div>
+              </div>
+              <div id="archivedNotesContainer">
+                  <h2>Catatan Diarsipkan</h2>
+                  <div id="archivedNotes"></div>
+              </div>
+          `;
   }
 
   addNote(note) {
@@ -87,16 +116,21 @@ class NoteList extends HTMLElement {
       : this.shadowRoot.querySelector('#activeNotes');
     const noteElement = document.createElement('div');
     noteElement.className = 'note';
-    noteElement.setAttribute('part', 'note'); // Menambahkan part untuk styling
+    noteElement.setAttribute('part', 'note');
     noteElement.innerHTML = `
-            <h3>${note.title}</h3>
-            <p>${note.body}</p>
-            <small>${new Date(note.createdAt).toLocaleString()}</small>
-            <button class="delete-btn"><i class="fas fa-trash"></i> Hapus</button>
-            <button class="archive-btn"><i class="fas ${
-              note.archived ? 'fa-undo' : 'fa-archive'
-            }"></i> ${note.archived ? 'Unarchive' : 'Archive'}</button>
-        `;
+              <div class="note-content">
+                  <h3>${note.title} <small>${new Date(
+      note.createdAt
+    ).toLocaleString()}</small></h3>
+                  <p>${note.body}</p>
+              </div>
+              <div class="note-buttons">
+                  <button class="delete-btn"><i class="fas fa-trash"></i> Hapus</button>
+                  <button class="archive-btn"><i class="fas ${
+                    note.archived ? 'fa-undo' : 'fa-archive'
+                  }"></i> ${note.archived ? 'Unarchive' : 'Archive'}</button>
+              </div>
+          `;
     notesContainer.appendChild(noteElement);
 
     requestAnimationFrame(() => {

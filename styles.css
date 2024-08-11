@@ -1,3 +1,4 @@
+/* styles.css */
 :root {
   --note-background: #ffffff;
   --note-border: #e0e0e0;
@@ -24,8 +25,8 @@ body {
 note-list::part(note) {
   background-color: var(--note-background);
   border: 1px solid var(--note-border);
-  transition: background-color 0.3s ease in-out transform 0.2s ease-in 0.2s
-    linear box-shadow 0.2s ease-in 0.2s;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
   gap: 10px;
 }
 
@@ -35,4 +36,10 @@ note-list::part(note):hover {
 
 note-list h2 {
   color: var(--note-title-color);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+  }
 }
