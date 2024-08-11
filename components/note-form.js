@@ -8,16 +8,35 @@ class NoteForm extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = `
             <style>
+                :host {
+                    display: block;
+                    margin-bottom: 20px;
+                }
+
                 form {
-                    display: flex;
-                    flex-direction: column;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 }
-                input, textarea {
-                    margin-bottom: 10px;
+
+                label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                    color: #333;
+                }
+
+                input[type="text"], textarea {
+                    width: 100%;
                     padding: 10px;
-                    border: 1px solid #ccc;
-                    border-radius: 5px;
+                    margin-bottom: 15px;
+                    border: 1px solid #e0e0e0;
+                    border-radius: 4px;
+                    box-sizing: border-box;
                 }
+
                 button {
                     padding: 10px;
                     background-color: #007bff;
@@ -25,49 +44,55 @@ class NoteForm extends HTMLElement {
                     border: none;
                     border-radius: 5px;
                     cursor: pointer;
+                    transition: background-color 0.3s, transform 0.2s;
+                    width: 100%;
                 }
+
                 button:hover {
                     background-color: #0056b3;
+                    transform: translateY(-2px);
                 }
             </style>
             <form id="noteForm">
-                <input type="text" id="title" placeholder="Judul Catatan" required>
-                <textarea id="body" placeholder="Isi Catatan" required></textarea>
-                <button type="submit">Tambah Catatan</button>
+                <label for="noteTitle">Judul Catatan</label>
+                <input type="text" id="noteTitle" required>
+
+                <label for="noteBody">Isi Catatan</label>
+                <textarea id="noteBody" rows="4" required></textarea>
+
+                <button type="submit"><i class="fas fa-plus"></i> Tambah Catatan</button>
             </form>
         `;
 
     this.shadowRoot
       .querySelector('#noteForm')
-      .addEventListener('submit', (e) => {
-        e.preventDefault();
-        const title = this.shadowRoot.querySelector('#title').value;
-        const body = this.shadowRoot.querySelector('#body').value;
-        this.addNote(title, body);
+      .addEventListener('submit', (event) => {
+        event.preventDefault();
+        this.addNote();
       });
   }
 
-  addNote(title, body) {
-    if (title.length < 3) {
-      alert('Judul harus lebih dari 3 karakter.');
-      return;
-    }
+  addNote() {
+    const title = this.shadowRoot.querySelector('#noteTitle').value;
+    const body = this.shadowRoot.querySelector('#noteBody').value;
 
-    const newNote = {
-      id: `notes-${Date.now()}`,
-      title,
-      body,
-      createdAt: new Date().toISOString(),
+    const note = {
+      id: Date.now(),
+      title: title,
+      body: body,
+      createdAt: new Date(),
       archived: false,
     };
-    notesData.push(newNote);
+
+    notesData.push(note);
     localStorage.setItem('notes', JSON.stringify(notesData));
-    this.dispatchEvent(new CustomEvent('note-added', { detail: newNote }));
-    this.resetForm();
+    this.clearForm();
+    this.dispatchEvent(new CustomEvent('note-added', { detail: note }));
   }
 
-  resetForm() {
-    this.shadowRoot.querySelector('#noteForm').reset();
+  clearForm() {
+    this.shadowRoot.querySelector('#noteTitle').value = '';
+    this.shadowRoot.querySelector('#noteBody').value = '';
   }
 }
 

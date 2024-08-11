@@ -24,7 +24,8 @@ body {
 note-list::part(note) {
   background-color: var(--note-background);
   border: 1px solid var(--note-border);
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease in-out transform 0.2s ease-in 0.2s
+    linear box-shadow 0.2s ease-in 0.2s;
   gap: 10px;
 }
 
