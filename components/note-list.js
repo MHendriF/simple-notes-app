@@ -8,13 +8,13 @@ class NoteList extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-      <style>
+       <style>
         :host {
           display: block;
           padding: 20px;
-          background-color: #f9f9f9;
-          border-radius: 8px;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          background-color: var(--note-list-bg, #f9f9f9);
+          border-radius: var(--note-list-radius, 8px);
+          box-shadow: var(--note-list-shadow, 0 2px 10px rgba(0, 0, 0, 0.1));
         }
 
         #activeNotesContainer, #archivedNotesContainer {
@@ -22,7 +22,7 @@ class NoteList extends HTMLElement {
         }
 
         h2 {
-          color: #007bff;
+          color: var(--note-list-title-color, #007bff);
           margin-bottom: 10px;
         }
 
@@ -33,21 +33,21 @@ class NoteList extends HTMLElement {
         }
 
         .note {
-          border: 1px solid #e0e0e0;
-          background-color: #ffffff;
-          padding: 15px;
-          border-radius: 8px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          border: 1px solid var(--note-border, #e0e0e0);
+          background-color: var(--note-bg, #ffffff);
+          padding: var(--note-padding, 15px);
+          border-radius: var(--note-radius, 8px);
+          box-shadow: var(--note-shadow, 0 2px 5px rgba(0, 0, 0, 0.1));
           transition: transform 0.2s, box-shadow 0.2s;
           position: relative;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-        } 
+        }
 
         .note:hover {
           transform: scale(1.02);
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: var(--note-hover-shadow, 0 4px 10px rgba(0, 0, 0, 0.2));
         }
 
         .note-content {
@@ -60,11 +60,11 @@ class NoteList extends HTMLElement {
         }
 
         button {
-          padding: 10px;
-          background-color: #007bff;
-          color: white;
+          padding: var(--note-button-padding, 10px);
+          background-color: var(--note-button-bg, #007bff);
+          color: var(--note-button-color, white);
           border: none;
-          border-radius: 5px;
+          border-radius: var(--note-button-radius, 5px);
           cursor: pointer;
           transition: background-color 0.3s, transform 0.2s;
           width: 100%;
@@ -75,7 +75,7 @@ class NoteList extends HTMLElement {
         }
 
         button:hover {
-          background-color: #0056b3;
+          background-color: var(--note-button-hover-bg, #0056b3);
           transform: translateY(-2px);
         }
 
@@ -95,10 +95,11 @@ class NoteList extends HTMLElement {
         small {
           margin-bottom: 10px;
           font-size: 0.8em;
-          color: #777;
+          color: var(--note-small-color, #777);
         }
+          
           button {
-            padding: 8px;
+            padding: var(--note-button-padding-mobile, 8px);
           }
         }
       </style>

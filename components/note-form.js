@@ -30,6 +30,12 @@ class NoteForm extends HTMLElement {
                   color: var(--note-form-label-color, #333);
                 }
 
+                 h2 {
+                    color: var(--note-form-title-color, #007bff);
+                    margin-bottom: 10px;
+                    text-align: center;
+                  }
+
                 input[type="text"], textarea {
                   width: 100%;
                   padding: var(--note-form-input-padding, 10px);
