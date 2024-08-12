@@ -7,119 +7,109 @@ class NoteList extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = `
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
-            :host {
-                display: block;
-                padding: 20px;
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            }
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <style>
+        :host {
+          display: block;
+          padding: 20px;
+          background-color: #f9f9f9;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-            #activeNotesContainer, #archivedNotesContainer {
-                margin-bottom: 20px;
-            }
+        #activeNotesContainer, #archivedNotesContainer {
+          margin-bottom: 20px;
+        }
 
-            h2 {
-                color: #007bff;
-                margin-bottom: 10px;
-            }
+        h2 {
+          color: #007bff;
+          margin-bottom: 10px;
+        }
 
-            #activeNotes, #archivedNotes {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 15px;
-            }
+        #activeNotes, #archivedNotes {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 15px;
+        }
 
-            .note {
-                border: 1px solid #e0e0e0;
-                background-color: #ffffff;
-                padding: 15px;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s, box-shadow 0.2s;
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
+        .note {
+          border: 1px solid #e0e0e0;
+          background-color: #ffffff;
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          transition: transform 0.2s, box-shadow 0.2s;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        } 
 
-            .note:hover {
-                transform: scale(1.02);
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            }
+        .note:hover {
+          transform: scale(1.02);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
 
-            .note-content {
-                flex: 1;
-            }
+        .note-content {
+          flex: 1;
+        }
 
-            .note-buttons {
-                display: flex;
-                flex-direction: column;
-            }
+        .note-buttons {
+          display: flex;
+          flex-direction: column;
+        }
 
-            button {
-                padding: 10px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s, transform 0.2s;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-bottom: 5px;
-            }
+        button {
+          padding: 10px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s, transform 0.2s;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 5px;
+        }
 
-            button:hover {
-                background-color: #0056b3;
-                transform: translateY(-2px);
-            }
+        button:hover {
+          background-color: #0056b3;
+          transform: translateY(-2px);
+        }
 
-            button i {
-                margin-right: 5px;
-            }
+        button i {
+          margin-right: 5px;
+        }
 
-            h3, small {
-                margin: 0;
-                word-wrap: break-word;
-            }
+        h3, small {
+          margin: 0;
+          word-wrap: break-word;
+        }
 
-            p {
-              word-wrap: break-word;
-            }
+        p {
+          word-wrap: break-word;
+        }
 
-            small {
-                margin-bottom: 10px;
-                font-size: 0.8em;
-                color: #777;
-            }
-
-            @media (max-width: 600px) {
-                #activeNotes, #archivedNotes {
-                    grid-template-columns: 1fr;
-                }
-
-                .note {
-                    padding: 10px;
-                }
-
-                button {
-                    padding: 8px;
-                }
-            }
-        </style>
-        <div id="activeNotesContainer">
-            <h2>Catatan Aktif</h2>
-            <div id="activeNotes"></div>
-        </div>
-        <div id="archivedNotesContainer">
-            <h2>Catatan Diarsipkan</h2>
-            <div id="archivedNotes"></div>
-        </div>
+        small {
+          margin-bottom: 10px;
+          font-size: 0.8em;
+          color: #777;
+        }
+          button {
+            padding: 8px;
+          }
+        }
+      </style>
+      <div id="activeNotesContainer">
+        <h2>Catatan Aktif</h2>
+        <div id="activeNotes"></div>
+      </div>
+      <div id="archivedNotesContainer">
+        <h2>Catatan Diarsipkan</h2>
+        <div id="archivedNotes"></div>
+      </div>
     `;
   }
 
@@ -144,10 +134,6 @@ class NoteList extends HTMLElement {
       </div>
     `;
     notesContainer.appendChild(noteElement);
-
-    requestAnimationFrame(() => {
-      noteElement.classList.add('show');
-    });
 
     noteElement.querySelector('.delete-btn').addEventListener('click', () => {
       this.deleteNote(note.id);
