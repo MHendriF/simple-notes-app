@@ -13,6 +13,13 @@ class SearchBar extends HTMLElement {
             margin-bottom: 20px;
           }
   
+          label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+          }
+  
           input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -21,7 +28,8 @@ class SearchBar extends HTMLElement {
             box-sizing: border-box;
           }
         </style>
-        <input type="text" id="searchInput" placeholder="Cari catatan...">
+        <label for="searchInput">Cari Catatan</label>
+        <input type="text" id="searchInput" placeholder="Masukkan keyword pencarian...">
       `;
 
     this.shadowRoot

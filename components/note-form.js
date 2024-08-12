@@ -23,6 +23,11 @@ class NoteForm extends HTMLElement {
                       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                   }
   
+                  h2 {
+                      color: #007bff;
+                      text-align: center;
+                  }
+
                   label {
                       display: block;
                       margin-bottom: 5px;
@@ -120,11 +125,12 @@ class NoteForm extends HTMLElement {
                       }
                   }
               </style>
+              <h2>Form Catatan</h2>
               <form id="noteForm">
-                  <label for="noteTitle">Judul Catatan</label>
+                  <label for="noteTitle">Judul</label>
                   <input type="text" id="noteTitle" required>
   
-                  <label for="noteBody">Isi Catatan</label>
+                  <label for="noteBody">Konten</label>
                   <textarea id="noteBody" rows="4" required></textarea>
   
                   <button type="submit"><i class="fas fa-plus"></i> Tambah Catatan</button>
