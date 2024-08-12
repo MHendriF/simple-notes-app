@@ -174,15 +174,17 @@ class NoteForm extends HTMLElement {
     const body = this.shadowRoot.querySelector('#noteBody').value;
 
     const note = {
-      id: Date.now(),
+      id: `notes-${new Date().getTime()}`,
       title: title,
       body: body,
       createdAt: new Date(),
       archived: false,
     };
 
+    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
     notesData.push(note);
     localStorage.setItem('notes', JSON.stringify(notesData));
+
     this.clearForm();
     this.dispatchEvent(new CustomEvent('note-added', { detail: note }));
   }

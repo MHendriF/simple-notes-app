@@ -1,4 +1,18 @@
-const notesData = JSON.parse(localStorage.getItem('notes')) || [];
+import { notesData } from './dummyData.js';
+
+// Fungsi untuk menginisialisasi localStorage dengan data dummy jika belum ada data
+function initializeLocalStorage() {
+  if (!localStorage.getItem('notes')) {
+    localStorage.setItem('notes', JSON.stringify(notesData));
+  }
+}
+
+// Panggil fungsi untuk menginisialisasi localStorage
+initializeLocalStorage();
+
+// Ambil data dari localStorage
+const notesDataFromLocalStorage =
+  JSON.parse(localStorage.getItem('notes')) || [];
 
 class App {
   constructor() {
@@ -18,7 +32,7 @@ class App {
   }
 
   loadNotes() {
-    this.noteList.updateNoteList(notesData);
+    notesDataFromLocalStorage.forEach((note) => this.addNoteToList(note));
   }
 
   addNoteToList(note) {
@@ -26,7 +40,7 @@ class App {
   }
 
   filterNotes(query) {
-    const filteredNotes = notesData.filter(
+    const filteredNotes = notesDataFromLocalStorage.filter(
       (note) =>
         note.title.toLowerCase().includes(query.toLowerCase()) ||
         note.body.toLowerCase().includes(query.toLowerCase())
