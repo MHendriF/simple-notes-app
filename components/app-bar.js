@@ -1,3 +1,4 @@
+// components\app-bar.js
 class AppBar extends HTMLElement {
   constructor() {
     super();

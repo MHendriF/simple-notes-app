@@ -1,4 +1,4 @@
-// note-form.js
+// components\note-form.js
 class NoteForm extends HTMLElement {
   constructor() {
     super();
@@ -105,6 +105,20 @@ class NoteForm extends HTMLElement {
                   .success-message.show {
                       opacity: 1;
                   }
+  
+                  @media (max-width: 600px) {
+                      form {
+                          padding: 10px;
+                      }
+  
+                      input[type="text"], textarea {
+                          padding: 8px;
+                      }
+  
+                      button {
+                          padding: 8px;
+                      }
+                  }
               </style>
               <form id="noteForm">
                   <label for="noteTitle">Judul Catatan</label>
@@ -128,7 +142,7 @@ class NoteForm extends HTMLElement {
           this.addNote();
           this.hideLoadingBar();
           this.showSuccessMessage();
-        }, 1000); // Simulasi delay untuk loading bar
+        }, 2000);
       });
   }
 
@@ -145,7 +159,7 @@ class NoteForm extends HTMLElement {
     successMessage.classList.add('show');
     setTimeout(() => {
       successMessage.classList.remove('show');
-    }, 3000); // Pesan sukses akan hilang setelah 3 detik
+    }, 3000);
   }
 
   addNote() {

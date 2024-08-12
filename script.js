@@ -1,3 +1,4 @@
+// script.js
 const notesData = JSON.parse(localStorage.getItem('notes')) || [];
 
 class App {
