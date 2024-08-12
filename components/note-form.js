@@ -112,6 +112,13 @@ class NoteForm extends HTMLElement {
                   opacity: 1;
                 }
 
+                .error-message {
+                  color: red;
+                  font-size: 0.8em;
+                  margin-top: -10px;
+                  margin-bottom: 10px;
+                }
+
                 @media (max-width: 600px) {
                   form {
                     padding: var(--note-form-padding-mobile, 10px);
@@ -129,10 +136,12 @@ class NoteForm extends HTMLElement {
               <h2>Form Catatan</h2>
               <form id="noteForm">
                   <label for="noteTitle">Judul</label>
-                  <input type="text" id="noteTitle" required>
+                  <input type="text" id="noteTitle">
+                  <div class="error-message" id="titleError"></div>
   
                   <label for="noteBody">Konten</label>
-                  <textarea id="noteBody" rows="4" required></textarea>
+                  <textarea id="noteBody" rows="4"></textarea>
+                  <div class="error-message" id="bodyError"></div>
   
                   <button type="submit"><i class="fas fa-plus"></i> Tambah Catatan</button>
               </form>
@@ -144,13 +153,21 @@ class NoteForm extends HTMLElement {
       .querySelector('#noteForm')
       .addEventListener('submit', (event) => {
         event.preventDefault();
-        this.showLoadingBar();
-        setTimeout(() => {
-          this.addNote();
-          this.hideLoadingBar();
-          this.showSuccessMessage();
-        }, 2000);
+        if (this.validateForm()) {
+          setTimeout(() => {
+            this.addNote();
+            this.hideLoadingBar();
+            this.showSuccessMessage();
+          }, 2000);
+        }
       });
+
+    this.shadowRoot
+      .querySelector('#noteTitle')
+      .addEventListener('input', () => this.validateTitle());
+    this.shadowRoot
+      .querySelector('#noteBody')
+      .addEventListener('input', () => this.validateBody());
   }
 
   showLoadingBar() {
@@ -169,10 +186,37 @@ class NoteForm extends HTMLElement {
     }, 3000);
   }
 
+  validateForm() {
+    return this.validateTitle() && this.validateBody();
+  }
+
+  validateTitle() {
+    const titleInput = this.shadowRoot.querySelector('#noteTitle');
+    const titleError = this.shadowRoot.querySelector('#titleError');
+    if (titleInput.value.trim() === '') {
+      titleError.textContent = 'Judul catatan tidak boleh kosong';
+      return false;
+    } else {
+      titleError.textContent = '';
+      return true;
+    }
+  }
+
+  validateBody() {
+    const bodyInput = this.shadowRoot.querySelector('#noteBody');
+    const bodyError = this.shadowRoot.querySelector('#bodyError');
+    if (bodyInput.value.trim() === '') {
+      bodyError.textContent = 'Isi catatan tidak boleh kosong';
+      return false;
+    } else {
+      bodyError.textContent = '';
+      return true;
+    }
+  }
+
   addNote() {
     const title = this.shadowRoot.querySelector('#noteTitle').value;
     const body = this.shadowRoot.querySelector('#noteBody').value;
-
     const note = {
       id: `notes-${new Date().getTime()}`,
       title: title,
@@ -192,6 +236,8 @@ class NoteForm extends HTMLElement {
   clearForm() {
     this.shadowRoot.querySelector('#noteTitle').value = '';
     this.shadowRoot.querySelector('#noteBody').value = '';
+    this.shadowRoot.querySelector('#titleError').textContent = '';
+    this.shadowRoot.querySelector('#bodyError').textContent = '';
   }
 }
 

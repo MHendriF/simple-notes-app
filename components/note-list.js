@@ -146,6 +146,7 @@ class NoteList extends HTMLElement {
   }
 
   deleteNote(noteId) {
+    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
     const index = notesData.findIndex((n) => n.id === noteId);
     if (index > -1) {
       notesData.splice(index, 1);
@@ -155,6 +156,7 @@ class NoteList extends HTMLElement {
   }
 
   toggleArchive(noteId) {
+    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
     const note = notesData.find((n) => n.id === noteId);
     if (note) {
       note.archived = !note.archived;
