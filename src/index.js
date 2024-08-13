@@ -29,6 +29,7 @@ class App {
   }
 
   filterNotes(query) {
+    console.log('🚀 ~ App ~ filterNotes ~ query:', query);
     this.noteList.filterNotes(query);
   }
 }

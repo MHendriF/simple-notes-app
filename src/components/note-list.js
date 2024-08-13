@@ -5,6 +5,7 @@ class NoteList extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this.notes = [];
     this.render();
   }
 
@@ -123,6 +124,7 @@ class NoteList extends HTMLElement {
       console.log('🚀 ~ loadNotes ~ response:', response);
       if (response.ok) {
         const notes = await response.json();
+        this.notes = notes.data;
         console.log('🚀 ~ loadNotes ~ notes:', notes);
         notes.data.forEach((note) => this.addNote(note));
       } else {
@@ -131,6 +133,15 @@ class NoteList extends HTMLElement {
     } catch (error) {
       console.error('Error:', error);
     }
+  }
+
+  displayNotes(notes) {
+    const activeNotesContainer = this.shadowRoot.querySelector('#activeNotes');
+    const archivedNotesContainer =
+      this.shadowRoot.querySelector('#archivedNotes');
+    activeNotesContainer.innerHTML = '';
+    archivedNotesContainer.innerHTML = '';
+    notes.forEach((note) => this.addNote(note));
   }
 
   addNote(note) {
@@ -212,6 +223,10 @@ class NoteList extends HTMLElement {
   }
 
   filterNotes(query) {
+    console.log('🚀 ~ filterNotes ~ query:', query);
+
+    console.log('🚀 ~ filterNotes ~ notes:', this.notes);
+
     if (!this.notes) return;
     const filteredNotes = this.notes.filter((note) => {
       return (
