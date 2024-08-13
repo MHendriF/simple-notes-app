@@ -235,7 +235,9 @@ class NoteForm extends HTMLElement {
         const newNote = await response.json();
         this.clearForm();
         this.showSuccessMessage();
-        this.dispatchEvent(new CustomEvent('note-added', { detail: newNote }));
+        this.dispatchEvent(
+          new CustomEvent('note-added', { detail: newNote.data })
+        );
       } else {
         console.error('Failed to add note');
       }

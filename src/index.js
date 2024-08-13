@@ -29,12 +29,7 @@ class App {
   }
 
   filterNotes(query) {
-    const filteredNotes = notesDataFromLocalStorage.filter(
-      (note) =>
-        note.title.toLowerCase().includes(query.toLowerCase()) ||
-        note.body.toLowerCase().includes(query.toLowerCase())
-    );
-    this.noteList.updateNoteList(filteredNotes);
+    this.noteList.filterNotes(query);
   }
 }
 

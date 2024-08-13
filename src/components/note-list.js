@@ -180,13 +180,25 @@ class NoteList extends HTMLElement {
     }
   }
 
-  toggleArchive(noteId) {
-    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
-    const note = notesData.find((n) => n.id === noteId);
-    if (note) {
-      note.archived = !note.archived;
-      localStorage.setItem('notes', JSON.stringify(notesData));
-      this.updateNoteList(notesData);
+  async toggleArchive(noteId) {
+    try {
+      const note = this.notes.find((n) => n.id === noteId);
+      if (!note) return;
+
+      const endpoint = note.archived
+        ? `${API_URL}/${noteId}/unarchive`
+        : `${API_URL}/${noteId}/archive`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        await this.loadNotes();
+      } else {
+        console.error('Failed to toggle archive status');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
   }
 
@@ -197,6 +209,17 @@ class NoteList extends HTMLElement {
     activeNotesContainer.innerHTML = '';
     archivedNotesContainer.innerHTML = '';
     await this.loadNotes();
+  }
+
+  filterNotes(query) {
+    if (!this.notes) return;
+    const filteredNotes = this.notes.filter((note) => {
+      return (
+        note.title.toLowerCase().includes(query.toLowerCase()) ||
+        note.body.toLowerCase().includes(query.toLowerCase())
+      );
+    });
+    this.displayNotes(filteredNotes);
   }
 }
 
