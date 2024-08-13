@@ -1,4 +1,6 @@
 // components\note-form.js
+const API_URL = 'https://notes-api.dicoding.dev/v2/notes';
+
 class NoteForm extends HTMLElement {
   constructor() {
     super();
@@ -154,11 +156,12 @@ class NoteForm extends HTMLElement {
 
     this.shadowRoot
       .querySelector('#noteForm')
-      .addEventListener('submit', (event) => {
+      .addEventListener('submit', async (event) => {
         event.preventDefault();
         if (this.validateForm()) {
           this.showLoadingBar();
-          this.addNote();
+          await this.addNote();
+          this.hideLoadingBar();
         }
       });
 
@@ -214,27 +217,31 @@ class NoteForm extends HTMLElement {
     }
   }
 
-  addNote() {
+  async addNote() {
     const title = this.shadowRoot.querySelector('#noteTitle').value;
     const body = this.shadowRoot.querySelector('#noteBody').value;
-    const note = {
-      id: `notes-${new Date().getTime()}`,
-      title: title,
-      body: body,
-      createdAt: new Date(),
-      archived: false,
-    };
+    const note = { title, body };
 
-    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
-    notesData.push(note);
-    localStorage.setItem('notes', JSON.stringify(notesData));
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(note),
+      });
 
-    setTimeout(() => {
-      this.clearForm();
-      this.hideLoadingBar();
-      this.showSuccessMessage();
-      this.dispatchEvent(new CustomEvent('note-added', { detail: note }));
-    }, 2000);
+      if (response.ok) {
+        const newNote = await response.json();
+        this.clearForm();
+        this.showSuccessMessage();
+        this.dispatchEvent(new CustomEvent('note-added', { detail: newNote }));
+      } else {
+        console.error('Failed to add note');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   clearForm() {

@@ -1,4 +1,6 @@
 // components\note-list.js
+const API_URL = 'https://notes-api.dicoding.dev/v2/notes';
+
 class NoteList extends HTMLElement {
   constructor() {
     super();
@@ -115,6 +117,22 @@ class NoteList extends HTMLElement {
     `;
   }
 
+  async loadNotes() {
+    try {
+      const response = await fetch(API_URL);
+      console.log('🚀 ~ loadNotes ~ response:', response);
+      if (response.ok) {
+        const notes = await response.json();
+        console.log('🚀 ~ loadNotes ~ notes:', notes);
+        notes.data.forEach((note) => this.addNote(note));
+      } else {
+        console.error('Failed to load notes');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   addNote(note) {
     const notesContainer = note.archived
       ? this.shadowRoot.querySelector('#archivedNotes')
@@ -146,13 +164,19 @@ class NoteList extends HTMLElement {
     });
   }
 
-  deleteNote(noteId) {
-    const notesData = JSON.parse(localStorage.getItem('notes')) || [];
-    const index = notesData.findIndex((n) => n.id === noteId);
-    if (index > -1) {
-      notesData.splice(index, 1);
-      localStorage.setItem('notes', JSON.stringify(notesData));
-      this.updateNoteList(notesData);
+  async deleteNote(noteId) {
+    try {
+      const response = await fetch(`${API_URL}/${noteId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        this.updateNoteList();
+      } else {
+        console.error('Failed to delete note');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
   }
 
@@ -166,13 +190,13 @@ class NoteList extends HTMLElement {
     }
   }
 
-  updateNoteList(filteredNotes = notesData) {
+  async updateNoteList() {
     const activeNotesContainer = this.shadowRoot.querySelector('#activeNotes');
     const archivedNotesContainer =
       this.shadowRoot.querySelector('#archivedNotes');
     activeNotesContainer.innerHTML = '';
     archivedNotesContainer.innerHTML = '';
-    filteredNotes.forEach((note) => this.addNote(note));
+    await this.loadNotes();
   }
 }
 

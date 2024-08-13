@@ -1,19 +1,7 @@
-// script.js
-import { notesData } from './dummyData.js';
-
-// Fungsi untuk menginisialisasi localStorage dengan data dummy jika belum ada data
-function initializeLocalStorage() {
-  if (!localStorage.getItem('notes')) {
-    localStorage.setItem('notes', JSON.stringify(notesData));
-  }
-}
-
-// Panggil fungsi untuk menginisialisasi localStorage
-initializeLocalStorage();
-
-// Ambil data dari localStorage
-const notesDataFromLocalStorage =
-  JSON.parse(localStorage.getItem('notes')) || [];
+import './components/app-bar.js';
+import './components/note-form.js';
+import './components/note-list.js';
+import './components/search-bar.js';
 
 class App {
   constructor() {
@@ -32,8 +20,8 @@ class App {
     this.loadNotes();
   }
 
-  loadNotes() {
-    notesDataFromLocalStorage.forEach((note) => this.addNoteToList(note));
+  async loadNotes() {
+    await this.noteList.loadNotes();
   }
 
   addNoteToList(note) {
