@@ -1,4 +1,5 @@
 // components\note-list.js
+import Swal from 'sweetalert2';
 const API_URL = 'https://notes-api.dicoding.dev/v2/notes';
 
 class NoteList extends HTMLElement {
@@ -120,18 +121,28 @@ class NoteList extends HTMLElement {
 
   async loadNotes() {
     try {
-      const response = await fetch(API_URL);
-      console.log('🚀 ~ loadNotes ~ response:', response);
-      if (response.ok) {
-        const notes = await response.json();
-        this.notes = notes.data;
-        console.log('🚀 ~ loadNotes ~ notes:', notes);
-        notes.data.forEach((note) => this.addNote(note));
+      const [activeNotesResponse, archivedNotesResponse] = await Promise.all([
+        fetch(`${API_URL}`),
+        fetch(`${API_URL}/archived`),
+      ]);
+      if (activeNotesResponse.ok && archivedNotesResponse.ok) {
+        const activeNotes = await activeNotesResponse.json();
+        const archivedNotes = await archivedNotesResponse.json();
+        this.notes = [...activeNotes.data, ...archivedNotes.data];
+        this.displayNotes(this.notes);
       } else {
-        console.error('Failed to load notes');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal memuat catatan!',
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Terjadi kesalahan saat memuat catatan!',
+      });
     }
   }
 
@@ -183,17 +194,32 @@ class NoteList extends HTMLElement {
 
       if (response.ok) {
         this.updateNoteList();
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Berhasil menghapus catatan!',
+        });
       } else {
-        console.error('Failed to delete note');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal menghapus catatan!',
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Terjadi kesalahan saat menghapus catatan!',
+      });
     }
   }
 
   async toggleArchive(noteId) {
+    console.log('🚀 ~ toggleArchive ~ noteId:', noteId);
     try {
       const note = this.notes.find((n) => n.id === noteId);
+      console.log('🚀 ~ toggleArchive ~ note:', note);
       if (!note) return;
 
       const endpoint = note.archived
@@ -203,13 +229,23 @@ class NoteList extends HTMLElement {
         method: 'POST',
       });
 
+      console.log('🚀 ~ toggleArchive ~ response:', response);
+
       if (response.ok) {
         await this.loadNotes();
       } else {
-        console.error('Failed to toggle archive status');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mengarsipkan/membuka arsip catatan!',
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Terjadi kesalahan saat mengarsipkan/membuka arsip catatan!',
+      });
     }
   }
 
@@ -229,6 +265,11 @@ class NoteList extends HTMLElement {
 
     if (!this.notes) return;
     const filteredNotes = this.notes.filter((note) => {
+      console.log('🚀 ~ toggleArchive ~ response:', response);
+      console.log('🚀 ~ toggleArchive ~ response:', response);
+      console.log('🚀 ~ toggleArchive ~ response:', response);
+      console.log('🚀 ~ toggleArchive ~ response:', response);
+      console.log('🚀 ~ toggleArchive ~ response:', response);
       return (
         note.title.toLowerCase().includes(query.toLowerCase()) ||
         note.body.toLowerCase().includes(query.toLowerCase())

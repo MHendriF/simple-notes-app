@@ -1,4 +1,5 @@
 // components\note-form.js
+import Swal from 'sweetalert2';
 const API_URL = 'https://notes-api.dicoding.dev/v2/notes';
 
 class NoteForm extends HTMLElement {
@@ -239,10 +240,18 @@ class NoteForm extends HTMLElement {
           new CustomEvent('note-added', { detail: newNote.data })
         );
       } else {
-        console.error('Failed to add note');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal menambahkan catatan!',
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Terjadi kesalahan saat menambahkan catatan!',
+      });
     }
   }
 
