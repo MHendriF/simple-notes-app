@@ -1,5 +1,6 @@
 // components\note-list.js
 import Swal from 'sweetalert2';
+import anime from 'animejs';
 const API_URL = 'https://notes-api.dicoding.dev/v2/notes';
 
 class NoteList extends HTMLElement {
@@ -177,13 +178,38 @@ class NoteList extends HTMLElement {
     `;
     notesContainer.appendChild(noteElement);
 
+    anime({
+      targets: noteElement,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      duration: 500,
+      easing: 'easeOutSine',
+    });
+
     noteElement.querySelector('.delete-btn').addEventListener('click', () => {
-      this.deleteNote(note.id);
+      this.confirmDelete(note.id);
     });
 
     noteElement.querySelector('.archive-btn').addEventListener('click', () => {
       this.toggleArchive(note.id);
     });
+  }
+
+  async confirmDelete(noteId) {
+    const result = await Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Anda tidak akan dapat mengembalikan catatan ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      await this.deleteNote(noteId);
+    }
   }
 
   async deleteNote(noteId) {
@@ -259,17 +285,8 @@ class NoteList extends HTMLElement {
   }
 
   filterNotes(query) {
-    console.log('🚀 ~ filterNotes ~ query:', query);
-
-    console.log('🚀 ~ filterNotes ~ notes:', this.notes);
-
     if (!this.notes) return;
     const filteredNotes = this.notes.filter((note) => {
-      console.log('🚀 ~ toggleArchive ~ response:', response);
-      console.log('🚀 ~ toggleArchive ~ response:', response);
-      console.log('🚀 ~ toggleArchive ~ response:', response);
-      console.log('🚀 ~ toggleArchive ~ response:', response);
-      console.log('🚀 ~ toggleArchive ~ response:', response);
       return (
         note.title.toLowerCase().includes(query.toLowerCase()) ||
         note.body.toLowerCase().includes(query.toLowerCase())

@@ -152,7 +152,6 @@ class NoteForm extends HTMLElement {
             <button type="submit"><i class="fas fa-plus"></i> Tambah Catatan</button>
         </form>
         <div class="loading-bar" style="display: none;"></div>
-        <div class="success-message" id="successMessage">Catatan berhasil ditambahkan!</div>
     `;
 
     this.shadowRoot
@@ -180,14 +179,6 @@ class NoteForm extends HTMLElement {
 
   hideLoadingBar() {
     this.shadowRoot.querySelector('.loading-bar').style.display = 'none';
-  }
-
-  showSuccessMessage() {
-    const successMessage = this.shadowRoot.querySelector('#successMessage');
-    successMessage.classList.add('show');
-    setTimeout(() => {
-      successMessage.classList.remove('show');
-    }, 3000);
   }
 
   validateForm() {
@@ -235,10 +226,14 @@ class NoteForm extends HTMLElement {
       if (response.ok) {
         const newNote = await response.json();
         this.clearForm();
-        this.showSuccessMessage();
         this.dispatchEvent(
           new CustomEvent('note-added', { detail: newNote.data })
         );
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Berhasil menambahkan catatan!',
+        });
       } else {
         Swal.fire({
           icon: 'error',
