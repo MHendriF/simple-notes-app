@@ -1,3 +1,4 @@
+// script.js
 import { notesData } from './dummyData.js';
 
 // Fungsi untuk menginisialisasi localStorage dengan data dummy jika belum ada data

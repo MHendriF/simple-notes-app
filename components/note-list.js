@@ -1,3 +1,4 @@
+// components\note-list.js
 class NoteList extends HTMLElement {
   constructor() {
     super();

@@ -1,3 +1,4 @@
+// components\search-bar.js
 class SearchBar extends HTMLElement {
   constructor() {
     super();
